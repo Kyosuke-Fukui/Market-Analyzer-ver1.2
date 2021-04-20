@@ -1,0 +1,102 @@
+body {
+  background-image: url(../img/Market.jpeg);
+  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: lighten;
+  background-size: cover;
+
+  font-size: 14px;
+}
+
+#top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#chart {
+  width: 1000px;
+  height: 400px;
+  margin: 10px 0 10px 20px;
+}
+
+#select {
+  width: 250px;
+  height: 390px;
+  margin: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#select input {
+  margin: 5px 0;
+}
+
+#btnarea {
+  text-align: right;
+  margin: 0 10px 0 0;
+}
+
+#bottom {
+  display: flex;
+}
+
+#backtest fieldset {
+  display: flex;
+  width: 430px;
+  height: 180px;
+  margin: 0 10px 0;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#optimizer fieldset {
+  display: flex;
+  width: 840px;
+  height: 180px;
+  margin: 0 20px auto 0;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#backtest-config,
+#opt-config,
+li,
+table {
+  font-size: 0.9em;
+}
+
+#opt-config {
+  width: 340px;
+}
+
+#backtest input,
+#optimizer input {
+  width: 40px;
+  margin: 2px 0;
+}
+
+#returnbtn,
+#backtestbtn {
+  margin: 10px 0 0 0;
+}
+
+li {
+  margin: 5px 0 0 0;
+}
+
+th,
+td {
+  border: solid 1px;
+}
+
+#backtest fieldset table {
+  border-collapse: collapse;
+  margin: 10px 0 10px 20px;
+  text-align: center;
+}
+#optimizer fieldset table {
+  border-collapse: collapse;
+  margin: 10px 0 10px 20px;
+  text-align: center;
+}

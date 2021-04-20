@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    <style>
+    body{font-size: 14px;}
+    div {margin: 0 0 0 20px;}
+    #risk,#reward,#lots,#marginLevel,#minMarginLevel,#leverage {width: 50px;}
+    button,input {margin: 10px auto 0 0;}
+    #CrPrice ,#sl ,#tp,#xyenPrice,#principal,#lossAmount{width: 80px;}
+    </style>
+    <title>簡単計算機能</title>
+  </head>
+  <body>
+    <div>
+      現在価格 <input id="CrPrice" type="number" value="1.1965" step="0.001" min="0"></input>
+      損切 <input id="risk" type="number" value="0.2" step="0.1" min="0"></input>%
+      利確 <input id="reward" type="number" value="0.6" step="0.1" min="0"></input>%<br>
+      <input type="radio" name="trade" value="buy" checked="checked">買い
+      <input type="radio" name="trade" value="sell">売り<br>
+      損切水準 <input id="sl"></input>
+      利確水準 <input id="tp"></input><br>
+      ロット数 <input id="lots" type="number" value="0.1" step="0.1" min="0"></input>
+      <input type="checkbox" id="xyencheck">クロス円
+      クロス円レート <input id="xyenPrice" type="number" value="108.39" step="0.01" min="0"></input><br>
+      元本 <input id="principal" type="number" value="500000" step="10000" min="0"></input>円
+      レバレッジ倍率 <input id="leverage" type="number" value="25" min="1"></input>倍<br>
+      許容損失額 <input id="lossAmount" type="number"></input>円
+      証拠金維持率 <input id="marginLevel" type="number"></input>%→
+      <input id="minMarginLevel" type="number"></input>%
+      <button id="calcPrice">計算実行</button>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script>
+    $("#calcPrice").on("click", function () {
+      //損切、利確水準の計算
+      let price = parseFloat($("#CrPrice").val())//現在価格
+      let risk = $("#risk").val()/100
+      let reward = $("#reward").val()/100
+      let trade = $('input[name=trade]:checked').val()//売または買
+      let slPrice,tpPrice
+      let array = $("#CrPrice").val().split('.');
+      let keta = array[1].length;
+      if(trade=="buy"){
+          slPrice=price*(1-risk)
+          tpPrice=price*(1+reward)
+      }
+      else{
+          slPrice=price*(1+risk)
+          tpPrice=price*(1-reward)
+      }
+      $("#sl").val(slPrice.toFixed(keta))
+      $("#tp").val(tpPrice.toFixed(keta))    
+        
+      //許容損失額、証拠金維持率の計算
+      let lots=parseFloat($("#lots").val())
+      let xyenPrice=parseFloat($("#xyenPrice").val())
+      let principal=parseInt($("#principal").val())
+      let leverage=parseInt($("#leverage").val())
+      let lossAmount //許容損失額
+      let marginLevel //取引直後の証拠金維持率
+      let minMarginLevel //許容損失額に達するまでに見込まれる最小証拠金維持率
+
+      if($("#xyencheck").prop("checked")){
+        lossAmount=lots*100000*price*risk //1Lot=100000通貨のため
+        marginLevel=principal/(lots*100000*price/leverage)*100
+        minMarginLevel=(principal-lossAmount)/(lots*100000*price/leverage)*100
+      }else{
+        lossAmount=lots*100000*price*risk*xyenPrice
+        marginLevel=principal/(lots*100000*price*xyenPrice/leverage)*100
+        minMarginLevel=(principal-lossAmount)/(lots*100000*price*xyenPrice/leverage)*100
+      }
+
+      $("#lossAmount").val(lossAmount.toFixed(0))
+      $("#marginLevel").val(marginLevel.toFixed(0))
+      $("#minMarginLevel").val(minMarginLevel.toFixed(0))
+    });
+  </script>
+</html>
