@@ -9,13 +9,13 @@ let RCI = (values, period) => {
     let target_sorted = values.slice(start, end + 1).sort((a, b) => {
       return b - a;
     });
-    let i = 0;
+    let j = 0;
     let d = 0;
-    while (i < period) {
-      let time_rank = period - i;
-      let price_rank = target_sorted.indexOf(target[i]) + 1;
-      d = d + (time_rank - price_rank) * (time_rank - price_rank);
-      i += 1;
+    while (j < period) {
+      let time_rank = period - j;
+      let price_rank = target_sorted.indexOf(target[j]) + 1;
+      d += (time_rank - price_rank) * (time_rank - price_rank);
+      j += 1;
     }
     let rci = (6 * d) / (period * (period * period - 1));
     rci = (1 - rci) * 100;
@@ -26,25 +26,23 @@ let RCI = (values, period) => {
 
 let RSI = (values, period) => {
   let result = [];
-  for (let i = 0; i < period; i++) {
-    result.push(NaN);
-  }
-  for (let end = period; end < values.length; end++) {
+  for (let i = 0; i < period - 1; i++) result.push(NaN);
+
+  for (let j = period - 1; j < values.length; j++) {
     let sumGain = 0;
     let sumLoss = 0;
-    let j = end - period + 1;
-    while (j < end + 1) {
-      let difference = values[j] - values[j - 1];
+    let k = j - period + 1;
+    while (k < j) {
+      let difference = values[k + 1] - values[k];
       if (difference >= 0) {
         sumGain += difference;
       } else {
         sumLoss -= difference;
       }
-      j += 1;
+      k += 1;
     }
 
-    let relativeStrength = sumGain / sumLoss;
-    let rsi = 100.0 - 100.0 / (1 + relativeStrength);
+    let rsi = (sumGain / (sumGain + sumLoss)) * 100;
     result.push(rsi);
   }
 
