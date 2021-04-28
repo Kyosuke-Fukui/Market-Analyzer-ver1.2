@@ -214,18 +214,21 @@ var PL = function (xArr, yArr, p1, pLow, pHigh, risk_rng, reward, dma, TrStop) {
     }
   }
 
+  let RR = profit / win / (loss / lose); //リスクリワード比（平均利幅と平均損失幅の比）
+  let PF = (RR * win) / trade / (1 - win / trade); //プロフィットファクター
+
   return [
     trade, //トレード回数
     PL_tan * 100, //総損益率（単利）
     (PL_tan / trade) * 100, //平均損益率（算術平均）
     (PL_fuku - 1) * 100, //総損益率（複利）
-    (PL_fuku ** (1 / trade) - 1) * 100, //平均損益率（幾何平均）
+    PF,
     buyArr,
     sellArr,
     slArr,
     tpArr,
     (win / trade) * 100, //勝率
-    profit / win / (loss / lose), //リスクリワード比（平均利幅と平均損失幅の比）
+    RR,
     (buy_win / buy_trade) * 100,
     (sell_win / sell_trade) * 100,
   ];
@@ -253,7 +256,7 @@ async function plot_PL(xArr, yArr) {
     dma,
     TrStop
   )[1].toFixed(2);
-  var AVR_tan = PL(
+  var PF = PL(
     xArr,
     yArr,
     p1,
@@ -263,7 +266,7 @@ async function plot_PL(xArr, yArr) {
     reward,
     dma,
     TrStop
-  )[2].toFixed(2);
+  )[4].toFixed(2);
   var PL_fuku = PL(
     xArr,
     yArr,
@@ -335,9 +338,7 @@ async function plot_PL(xArr, yArr) {
       </tr>
     </table>
   </li>
-  <li>1トレードの平均損益率：${AVR_tan}%
-  </li>
-  `);
+  <li>プロフィットファクター：${PF}</li>`);
 
   var buyArr = PL(xArr, yArr, p1, pLow, pHigh, risk, reward, dma, TrStop)[5];
   var sellArr = PL(xArr, yArr, p1, pLow, pHigh, risk, reward, dma, TrStop)[6];
