@@ -359,9 +359,9 @@ function newwindow() {
 $('input[name="oscillator"]').change(function () {
   var val = $(this).val();
 
-  if (val == "RSI") {
-    $("span").text("RSI");
-  } else {
+  if (val == "RCI") {
     $("span").text("RCI");
+  } else {
+    $("span").text("RSI");
   }
 });
