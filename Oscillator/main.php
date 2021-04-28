@@ -30,6 +30,7 @@
           <fieldset>
           <legend>オシレーター選択</legend>
             <input type="radio" name="oscillator" value="RSI" checked></input> RSI
+            <input type="radio" name="oscillator" value="RSI2" ></input> Cutler's RSI
             <input type="radio" name="oscillator" value="RCI"></input> RCI
           </fieldset>
         </div>
